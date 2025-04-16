@@ -25,8 +25,8 @@ app.get('/api/product', async (req, res) => {
         
         const productResponse = await axios.get('https://api.scrapingdog.com/amazon/product', {
             params: { 
-                api_key, 
-                asin, 
+                api_key: api_key, 
+                asin: asin, 
                 domain: 'com', 
                 country: 'us',
             }
