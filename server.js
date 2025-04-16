@@ -5,8 +5,18 @@ const path = require('path');
 require('dotenv').config();
 
 const app = express();
-const port = 3000;
-const api_key = process.env.API_KEY;
+const port = process.env.PORT || 3000;
+let api_key = process.env.API_KEY;
+
+
+if (!api_key) {
+  console.error('WARNING: API_KEY not found in environment variables');
+}
+
+if (api_key) {
+  const maskedKey = `${api_key.substring(0, 4)}...${api_key.substring(api_key.length - 4)}`;
+  console.log(`Using API key: ${maskedKey}`);
+}
 
 app.use(express.static('public'));
 app.use(express.json());
@@ -19,6 +29,13 @@ app.use((req, res, next) => {
 app.get('/api/product', async (req, res) => {
     const { asin } = req.query;
     if (!asin) return res.status(400).json({ error: 'ASIN is required' });
+
+    if (!api_key) {
+        return res.status(500).json({ 
+            error: 'Server configuration error', 
+            details: 'API key not configured'
+        });
+    }
 
     try {
         console.log(`Fetching product data for ASIN: ${asin}`);
