@@ -1,22 +1,10 @@
-const express = require('express');
 const axios = require('axios');
-const path = require('path');
 
-require('dotenv').config();
+export default async function handler(req, res) {
+  if (req.method !== 'GET') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
 
-const app = express();
-const port = process.env.PORT || 3000;
-const api_key = process.env.API_KEY;
-
-app.use(express.static('public'));
-app.use(express.json());
-
-app.use((req, res, next) => {
-  console.log(`${req.method} ${req.url}`);
-  next();
-});
-
-app.get('/api/product', async (req, res) => {
   const { asin } = req.query;
   if (!asin) return res.status(400).json({ error: 'ASIN is required' });
 
@@ -25,7 +13,7 @@ app.get('/api/product', async (req, res) => {
     
     const productResponse = await axios.get('https://api.scrapingdog.com/amazon/product', {
       params: { 
-        api_key: api_key, 
+        api_key: process.env.API_KEY, 
         asin: asin, 
         domain: 'com', 
         country: 'us',
@@ -38,7 +26,7 @@ app.get('/api/product', async (req, res) => {
       return res.status(404).json({ error: 'Product not found' });
     }
 
-    // Process the data as in the original code
+    // Process the data as in your original code
     const categoryId = productResponse.data.category_id || null;
 
     let customerReviews = [];
@@ -91,12 +79,4 @@ app.get('/api/product', async (req, res) => {
       details: error.response?.data || error.message
     });
   }
-});
-
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
-
-app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
-});
+}
