@@ -23,14 +23,26 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function fetchProductData(asin) {
-        
         const timestamp = new Date().getTime();
         const response = await fetch(`/api/product?asin=${asin}&_t=${timestamp}`);
+        
         if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(`Failed to fetch product data: ${errorData.error || response.statusText}`);
+            // First check if the response is JSON
+            const contentType = response.headers.get("content-type");
+            if (contentType && contentType.includes("application/json")) {
+                const errorData = await response.json();
+                throw new Error(`Failed to fetch product data: ${errorData.error || response.statusText}`);
+            } else {
+                // If not JSON, just use the status text
+                throw new Error(`Failed to fetch product data: ${response.status} ${response.statusText}`);
+            }
         }
-        return await response.json();
+        
+        try {
+            return await response.json();
+        } catch (error) {
+            throw new Error(`Error parsing response: The API didn't return valid JSON data`);
+        }
     }
 
     function formatFeatureValue(value, key) {
