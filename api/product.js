@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -10,23 +10,22 @@ export default async function handler(req, res) {
 
   try {
     console.log(`Fetching product data for ASIN: ${asin}`);
-    
+
     const productResponse = await axios.get('https://api.scrapingdog.com/amazon/product', {
-      params: { 
-        api_key: process.env.API_KEY, 
-        asin: asin, 
-        domain: 'com', 
+      params: {
+        api_key: process.env.API_KEY,
+        asin: asin,
+        domain: 'com',
         country: 'us',
       }
     });
 
     console.log(`API response received for ${asin}`);
-    
+
     if (!productResponse.data?.title) {
       return res.status(404).json({ error: 'Product not found' });
     }
 
-    // Process the data as in your original code
     const categoryId = productResponse.data.category_id || null;
 
     let customerReviews = [];
@@ -66,17 +65,17 @@ export default async function handler(req, res) {
     res.status(200).json(productData);
   } catch (error) {
     console.error('Error fetching product data:', error.message);
-    
+
     if (error.response) {
       console.error('API Response Error:', {
         status: error.response.status,
         data: error.response.data
       });
     }
-    
-    res.status(500).json({ 
+
+    res.status(500).json({
       error: 'Failed to fetch product data',
       details: error.response?.data || error.message
     });
   }
-}
+};
