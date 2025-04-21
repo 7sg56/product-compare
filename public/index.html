@@ -17,6 +17,14 @@
             max-width: 300px;
             word-wrap: break-word;
         }
+        .product-image {
+            max-width: 120px;
+            max-height: 120px;
+            object-fit: contain;
+            margin: 0 auto;
+            display: block;
+            border-radius: 4px;
+        }
     </style>
 </head>
 <body class="bg-gray-100 h-full">
@@ -60,6 +68,11 @@
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
+                                <tr>
+                                    <td class="px-4 py-2 text-sm font-medium text-gray-900">Product Image</td>
+                                    <td id="product1-image" class="px-4 py-2 text-sm text-gray-500 text-center"></td>
+                                    <td id="product2-image" class="px-4 py-2 text-sm text-gray-500 text-center"></td>
+                                </tr>
                                 <tr>
                                     <td class="px-4 py-2 text-sm font-medium text-gray-900">Product Name</td>
                                     <td id="product1-name" class="px-4 py-2 text-sm text-gray-500"></td>
