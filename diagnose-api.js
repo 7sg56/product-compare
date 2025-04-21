@@ -1,19 +1,16 @@
-// Diagnostic script to identify API issues
 const axios = require('axios');
 require('dotenv').config();
 
-// Sample ASINs for testing
 const testAsins = [
-    'B07ZPKN6YR', // Example ASIN 1
-    'B07ZPKBL9V'  // Example ASIN 2
+    'B07ZPKN6YR', 
+    'B07ZPKBL9V'  
 ];
 
-// Function to fetch product data with detailed logging
 async function fetchProductData(asin) {
     try {
         console.log(`\n=== FETCHING DATA FOR ASIN: ${asin} ===`);
         
-        // First, check if our server is running and accessible
+        
         console.log('Checking server status...');
         const serverResponse = await axios.get('http://localhost:3000/');
         console.log(`Server is running. Status: ${serverResponse.status}`);
@@ -109,13 +106,11 @@ async function testScrapingDogAPI(asin) {
     }
 }
 
-// Main function to run diagnostics
 async function runDiagnostics() {
     console.log('=== API DIAGNOSTIC TOOL ===');
     console.log(`API Key: ${process.env.API_KEY ? 'Present' : 'Missing'}`);
     
     try {
-        // Test first ASIN through our server
         console.log('\n=== TESTING FIRST ASIN THROUGH OUR SERVER ===');
         await fetchProductData(testAsins[0]);
         
