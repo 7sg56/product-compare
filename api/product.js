@@ -1,6 +1,6 @@
-const axios = require('axios');
+import axios from 'axios';
 
-module.exports = async function handler(req, res) {
+export default async function handler(req, res) {
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -20,9 +20,7 @@ module.exports = async function handler(req, res) {
       }
     });
 
-    console.log(`API response received for ${asin}`);
-    console.log('Raw response data:', JSON.stringify(productResponse.data, null, 2));
-
+    // ...existing code for processing productResponse...
     if (!productResponse.data?.title) {
       return res.status(404).json({ error: 'Product not found' });
     }
@@ -40,7 +38,7 @@ module.exports = async function handler(req, res) {
               parseFloat(review.rating.split(' ')[0]) : 
               parseFloat(review.rating)) || 0 : 0,
           review: review.review_snippet || review.review || review.content || 'No review content'
-        })).filter(review => review.rating > 0); // Only include reviews with valid ratings
+        })).filter(review => review.rating > 0);
       }
     }
 
@@ -116,4 +114,4 @@ module.exports = async function handler(req, res) {
       details: error.response?.data || error.message
     });
   }
-};
+}

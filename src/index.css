@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body {
+  height: 100%;
+}
+
+.content-container {
+  height: calc(100vh - 2rem);
+  overflow-y: auto;
+}
+
+.comparison-table td {
+  max-width: 300px;
+  word-wrap: break-word;
+}
+
+.product-image {
+  max-width: 200px;
+  max-height: 200px;
+  object-fit: contain;
+  margin: 0 auto;
+  display: block;
+  border-radius: 4px;
+}

@@ -1,6 +1,7 @@
 {
-  "rewrites": [
-    { "source": "/api/(.*)", "destination": "/server.js" },
-    { "source": "/(.*)", "destination": "/public/index.html" }
-  ]
+  "functions": {
+    "api/product.js": {
+      "maxDuration": 30
+    }
+  }
 }
